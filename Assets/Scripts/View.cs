@@ -65,4 +65,12 @@ public class View : MonoBehaviour
         // Vector3 _pos = GetVector3Handler();
         EdgeList[_selectedEdgeId].transform.position = GetVector3Handler();
     }
+    // 平均を可視化
+    public void UpdateAverageText(float _val){
+        AverageUI.text = _val.ToString();
+    }
+    // ピークのパラメタを表示
+    public void UpdatePeakText(string _str){
+        PeakParam.text = _str;
+    }
 }

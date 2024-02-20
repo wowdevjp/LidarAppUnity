@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Model : MonoBehaviour
 {
+
+    public float Average = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {

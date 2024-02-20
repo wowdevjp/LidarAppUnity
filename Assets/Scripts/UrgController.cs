@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UniRx;
 using Urg;
 using Filter;
+using Common;
 
 public class UrgController : MonoBehaviour
 {
@@ -15,7 +18,7 @@ public class UrgController : MonoBehaviour
     private List<List<int>> clusterIndices;
     private AffineConverter affineConverter;
     private List<GameObject> debugObjects;
-    private Object syncLock = new Object();
+    private UnityEngine.Object syncLock = new UnityEngine.Object();
     private System.Diagnostics.Stopwatch stopwatch;
     //一定間隔でセンサーのrebootを行う    
     // private float _repeatSpan = 60*3;      //繰り返す間隔
@@ -33,6 +36,20 @@ public class UrgController : MonoBehaviour
        get { return averageTh; }
        set { averageTh = value; }
    }
+   // センサの取得する値の平均値
+    private FloatReactiveProperty  _distanceAverage = new FloatReactiveProperty();
+    public float distanceAverage{
+        get {return _distanceAverage.Value;}
+        set {_distanceAverage.Value = value;}
+    }
+    public IObservable<float> OnAverageChanged => _distanceAverage;
+    // センサのピーク情報のパラメタを出力//頂点データ確認用string
+    private ReactiveProperty<PeakParam>  _PeakParam = new ReactiveProperty<PeakParam>();
+    public PeakParam PeakParamData{
+        get {return _PeakParam.Value;}
+        set {_PeakParam.Value = value;}
+    }
+    public IObservable<PeakParam> OnPeakParamChange => _PeakParam;
     // [SerializeField] List<string> ButtonStrList;
     // デフォルトでは2
     [SerializeField] private int detectTh = 3;
@@ -110,10 +127,6 @@ public class UrgController : MonoBehaviour
             float[] clippedData = new float[LENGTH];
             List<int> maxIndexList = new List<int>();
             float[] gradList = new float[LENGTH];
-            
-            //頂点データ確認用string
-            string peakParam = "";
-            
             //中心から10度、－10度の検知角度になるように調整
             minId = rawDistances.Length/2 - rawDistances.Length/27;
             int maxId = rawDistances.Length/2 + rawDistances.Length/27;
@@ -122,15 +135,13 @@ public class UrgController : MonoBehaviour
             clippedData = filter.clippingData(rawDistances, minId, maxId);
             // 移動平均
             filter.avarageFilter(ref clippedData, clippedData.Length, 6);
-            float distanceAverage = filter.getAverage(clippedData, clippedData.Length);
+            distanceAverage = filter.getAverage(clippedData, clippedData.Length);
             Debug.Log($"Average:{distanceAverage}");
             // gradList = filter.gradFilter(clippedData, clippedData.Length, 14);
             // maxIndexList = filter.getMaxList(clippedData, gradList, clippedData.Length, 14, distanceAverage - distanceAverage/6);
             Debug.Log($"Length:{clippedData.Length}");
             positions.Add(urg.transform.position);
             peakId = filter.getMaxIndex(clippedData, clippedData.Length, averageTh);
-            peakParam += peakId.ToString() + ",";
-            peakParam += clippedData[peakId].ToString("f2") + ",";
             for (int i = 0; i < clippedLength; i++)
             {
                 float distance = clippedData[i];
@@ -142,8 +153,9 @@ public class UrgController : MonoBehaviour
                 {
                     peakDistance = distance;
                     positions.Add(new Vector3(pos.x, pos.y, urg.transform.position.z));
-                    peakParam += "{" + pos.x.ToString("f2") + "," + pos.y.ToString("f2") + "," + pos.z.ToString("f2") +  "}";
-                    Debug.Log($"peakParam:{peakParam}");
+
+                    PeakParamData = new PeakParam(peakId, clippedData[peakId], pos);
+                    Debug.Log($"PeakParam:{PeakParamData}");
                 }else{
                         positions.Add((Vector3)pos);
                 }
@@ -165,7 +177,7 @@ public class UrgController : MonoBehaviour
             linerend.SetPositions(positions.ToArray());
 
             // AverageUI.text = distanceAverage.ToString("f6");
-            // PeakParam.text = peakParam;
+            // PeakParam.text = PeakParam;
 
         }
 
