@@ -1218,6 +1218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   urgController: {fileID: 420721374}
   view: {fileID: 892278993}
+  model: {fileID: 793301053}
 --- !u!4 &414368643
 Transform:
   m_ObjectHideFlags: 0
@@ -1388,6 +1389,8 @@ MonoBehaviour:
     - m_Text: Button4L
       m_Image: {fileID: 0}
     - m_Text: Button4R
+      m_Image: {fileID: 0}
+    - m_Text: InitSetup!
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1952,6 +1955,52 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!1 &793301052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 793301054}
+  - component: {fileID: 793301053}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &793301053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793301052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9add9776589ebe44ca508ae315d952b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Average: 0
+  _edgeIdList: 0000000000000000000000000000000000000000000000000000000000000000
+--- !u!4 &793301054
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793301052}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0076905587, y: -1.3996818, z: -0.46799594}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795084070
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,15 +2406,9 @@ MonoBehaviour:
   PeakParam: {fileID: 1222877902}
   ButtonDropDown: {fileID: 479198737}
   SetButton: {fileID: 311379811}
-  EdgeList:
-  - {fileID: 1009362132}
-  - {fileID: 974589890}
-  - {fileID: 780712023}
-  - {fileID: 1049804760}
-  - {fileID: 1922995392}
-  - {fileID: 839172589}
-  - {fileID: 1360536135}
-  - {fileID: 6915390}
+  edgeBarPrefab: {fileID: 1084601791702839625, guid: 9b7a70cd52820c2408761e1191fd2462,
+    type: 3}
+  EdgeObjList: []
 --- !u!4 &892278994
 Transform:
   m_ObjectHideFlags: 0
@@ -4589,5 +4632,6 @@ SceneRoots:
   - {fileID: 1762998773}
   - {fileID: 1987762419}
   - {fileID: 414368643}
-  - {fileID: 420721375}
   - {fileID: 892278994}
+  - {fileID: 793301054}
+  - {fileID: 420721375}

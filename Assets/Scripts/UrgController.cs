@@ -29,8 +29,9 @@ public class UrgController : MonoBehaviour
     private int minId;
     private float peakDistance;
     private int peakId;
+    public int clippedLength;
    //プロパティ
-    private float averageTh = 0.728f;
+    private float averageTh = 0.750f;
    public float AverageTh
    {
        get { return averageTh; }
@@ -50,6 +51,10 @@ public class UrgController : MonoBehaviour
         set {_PeakParam.Value = value;}
     }
     public IObservable<PeakParam> OnPeakParamChange => _PeakParam;
+
+    private BoolReactiveProperty _startSensorFlag = new BoolReactiveProperty(false);
+    public IObservable<bool> OnStartSensorFlag => _startSensorFlag;
+
     // [SerializeField] List<string> ButtonStrList;
     // デフォルトでは2
     [SerializeField] private int detectTh = 3;
@@ -58,6 +63,7 @@ public class UrgController : MonoBehaviour
     private Filter1d filter = new Filter1d();
 
     public List<GameObject> testObjList;
+    private float[] clippedData = new float[LENGTH];
 
     // Start is called before the first frame update
     void Awake()
@@ -124,17 +130,17 @@ public class UrgController : MonoBehaviour
             List<Vector3> positionsEdge = new List<Vector3>();
             List<float> distanceList = new List<float>();
             // List<float> clippedData = new List<float>();
-            float[] clippedData = new float[LENGTH];
+            // float[] clippedData = new float[LENGTH];
             List<int> maxIndexList = new List<int>();
             float[] gradList = new float[LENGTH];
             //中心から10度、－10度の検知角度になるように調整
-            minId = rawDistances.Length/2 - rawDistances.Length/27;
-            int maxId = rawDistances.Length/2 + rawDistances.Length/27;
-            int clippedLength = maxId - minId;
+            minId = rawDistances.Length/2 - rawDistances.Length/27 - rawDistances.Length/(27*2);
+            int maxId = rawDistances.Length/2 + rawDistances.Length/27 + rawDistances.Length/(27*2);
+            clippedLength = maxId - minId;
             // クリッピングしたデータ
             clippedData = filter.clippingData(rawDistances, minId, maxId);
             // 移動平均
-            filter.avarageFilter(ref clippedData, clippedData.Length, 6);
+            filter.avarageFilter(ref clippedData, clippedData.Length, 12);
             distanceAverage = filter.getAverage(clippedData, clippedData.Length);
             Debug.Log($"Average:{distanceAverage}");
             // gradList = filter.gradFilter(clippedData, clippedData.Length, 14);
@@ -160,6 +166,12 @@ public class UrgController : MonoBehaviour
                         positions.Add((Vector3)pos);
                 }
             }
+            //peakが取得されていないときは0を入れて確実に落とす
+            if (peakId == 0)
+            {
+                PeakParamData = new PeakParam(0,0,new Vector3(0,0,0));
+            }
+
             positions.Add(urg.transform.position);
             // for (int i = 0; i < maxIndexList.Count; i++)
             // {
@@ -178,7 +190,12 @@ public class UrgController : MonoBehaviour
 
             // AverageUI.text = distanceAverage.ToString("f6");
             // PeakParam.text = PeakParam;
-
+            //-----Sensor Active Fin -----
+            if (!_startSensorFlag.Value && rawDistances.Length >= LENGTH)
+            {
+                _startSensorFlag.Value = true;
+                Debug.Log($"FirstclippedData → {string.Join(", ", clippedData)}");
+            }
         }
 
         if (locations == null)
@@ -275,6 +292,9 @@ public class UrgController : MonoBehaviour
     }
     public Vector3 GetPeakPos(){
         return convertPos(peakDistance, peakId);
+    }
+    public Vector3 GetPosbyId(int id){
+        return convertPos(clippedData[id], id);
     }
     public void SetaverageTh(){
 
