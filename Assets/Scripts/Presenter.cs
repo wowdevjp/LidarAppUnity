@@ -20,6 +20,7 @@ public class Presenter : MonoBehaviour
     [SerializeField] private UrgController urgController;
     [SerializeField] private View view;
     [SerializeField] private Model model;
+    [SerializeField] private OscJack_Client oscClient;
 
     void Awake()
     {
@@ -41,21 +42,7 @@ public class Presenter : MonoBehaviour
         ).AddTo(view);
         urgController.OnPeakParamChange.Subscribe(_peakParam =>
         {
-            model.SetPeakParam(_peakParam);
-            string _str = "";
-            _str = _peakParam.ID.ToString() + ",";
-            _str += _peakParam.Distance.ToString("f3") + ",";
-            _str += "{" + _peakParam.Pos.x.ToString("f2") + "," + _peakParam.Pos.y.ToString("f2") + "," + _peakParam.Pos.z.ToString("f2") +  "}" + ",";
-            view.UpdatePeakText(_str);
-            // Debug.LogAssertion(_str);
-            //検知されたボタンを取得
-            ActiveBtnState activeBtn = model.GetBtnState();
-            if (activeBtn.isFine)
-            {
-                Debug.LogWarning($"Detect!!! → {activeBtn.btnId}");
-            }else{
-                Debug.LogWarning($"NotDetect → {activeBtn.btnId}");
-            }
+            main(_peakParam);
         }).AddTo(view);
         urgController.OnStartSensorFlag.Subscribe(_flag =>
         {
@@ -91,6 +78,42 @@ public class Presenter : MonoBehaviour
         return customPos;
     }
     //----- for view update -----
+
+    //----- main detect and send func -----
+    private void main(PeakParam _peakParam){
+        model.SetPeakParam(_peakParam);
+        string _str = "";
+        _str = _peakParam.ID.ToString() + ",";
+        _str += _peakParam.Distance.ToString("f3") + ",";
+        _str += "{" + _peakParam.Pos.x.ToString("f2") + "," + _peakParam.Pos.y.ToString("f2") + "," + _peakParam.Pos.z.ToString("f2") +  "}" + ",";
+        view.UpdatePeakText(_str);
+        // Debug.LogAssertion(_str);
+        //検知されたボタンを取得
+        ActiveBtnState activeBtn = model.GetBtnState();
+        if (activeBtn.isFine)
+        {
+            Debug.LogWarning($"Detect!!! → {activeBtn.btnId}");
+            //OSCで検出結果の送信
+            int[] btnDetectArray = new int[Constants.BTNNUM];
+            //0で初期値設定＋検出BtnIdは1に
+            for (int i = 0; i < Constants.BTNNUM; i++)
+            {
+                if (i == activeBtn.btnId)
+                {
+                    btnDetectArray[i] = Constants.HIGH;
+                }else{
+                    btnDetectArray[i] = Constants.LOW;
+                }
+            }
+            //BTNNUM分の検出結果を送信
+            // int[] btnDetectArrayDammy = new int[Constants.BTNNUM]{0,0,0,0};
+            oscClient.Send(btnDetectArray);
+        }else{
+            Debug.LogWarning($"NotDetect → {activeBtn.btnId}");
+            int[] btnDetect0Array = new int[Constants.BTNNUM]{0,0,0,0};
+            oscClient.Send(btnDetect0Array);
+        }
+    }
     
 
 }

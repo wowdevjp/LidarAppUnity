@@ -1219,6 +1219,7 @@ MonoBehaviour:
   urgController: {fileID: 420721374}
   view: {fileID: 892278993}
   model: {fileID: 793301053}
+  oscClient: {fileID: 1198588963}
 --- !u!4 &414368643
 Transform:
   m_ObjectHideFlags: 0
@@ -3029,6 +3030,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1198588962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198588964}
+  - component: {fileID: 1198588963}
+  m_Layer: 0
+  m_Name: OscClilent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1198588963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198588962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f127f523d881bde409a31a5071143c8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ipAddress: 127.0.0.1
+  Port: 7001
+  addrList:
+  - 
+  - 
+  - 
+  - 
+--- !u!4 &1198588964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198588962}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0000370848, y: -1.8053159, z: -0.47391462}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1222877900
 GameObject:
   m_ObjectHideFlags: 0
@@ -4637,3 +4689,4 @@ SceneRoots:
   - {fileID: 892278994}
   - {fileID: 793301054}
   - {fileID: 420721375}
+  - {fileID: 1198588964}

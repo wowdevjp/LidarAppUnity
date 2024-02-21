@@ -15,8 +15,6 @@ public class Model : MonoBehaviour
     // 範囲検知に用いるid配列
     [SerializeField] private int[] _edgeIdList;
     [SerializeField] private PeakParam peakParam;
-    const int LOW = 0;
-    const int HIGH = 1;
     private List<List<int>> btnFlagList = new List<List<int>>();
     public int MaxId = 0;
     // [SerializeField] private IReactiveCollection<int> EdgeList => _edgeList;
@@ -25,7 +23,7 @@ public class Model : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        _edgeIdList = new int[Constants.EDGENUM] { 15, 45, 225, 225, 225, 225, 225, 225 };
+        _edgeIdList = new int[Constants.EDGENUM] { 0, 30, 69, 120, 150, 200, 210, 229 };
         for (int i = 0; i < Constants.BTNNUM; i++)
         {
             btnFlagList.Add(new List<int>(BTNBUF));
@@ -67,13 +65,13 @@ public class Model : MonoBehaviour
         // 各ボタン内にpeakIDが存在するかどうか
         for (int i = 0; i < Constants.BTNNUM; i++)
         {
-            int addFlag = LOW;
+            int addFlag = Constants.LOW;
             int edgeId = i*2;
             if (peakParam.ID >= _edgeIdList[edgeId] && peakParam.ID <= _edgeIdList[edgeId+1])
             {
-                addFlag = HIGH;;
+                addFlag = Constants.HIGH;;
             }else{
-                addFlag = LOW;
+                addFlag = Constants.LOW;
             }
             //一定バッファたまるかどうか
             if (startCalc)
@@ -94,7 +92,7 @@ public class Model : MonoBehaviour
             int cnt = 0;
             foreach (var flag in btnFlagList[i])
             {
-                if (flag == HIGH)
+                if (flag == Constants.HIGH)
                 {
                     cnt++;
                 }

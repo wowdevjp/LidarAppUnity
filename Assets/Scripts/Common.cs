@@ -10,6 +10,8 @@ public static class Constants
 {
     public const int BTNNUM = 4;
     public const int EDGENUM = 8;
+    public const int LOW = 0;
+    public const int HIGH = 1;
 }
 public struct ActiveBtnState{
     public bool isFine;
