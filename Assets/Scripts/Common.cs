@@ -11,6 +11,15 @@ public static class Constants
     public const int BTNNUM = 4;
     public const int EDGENUM = 8;
 }
+public struct ActiveBtnState{
+    public bool isFine;
+    public int btnId;
+    public ActiveBtnState(bool _isFine, int _btnId){
+        isFine = _isFine;
+        btnId = _btnId;
+    }
+
+}
 public struct PeakParam{
     public int ID;
     public float Distance;

@@ -13,6 +13,7 @@ using TMPro.EditorUtilities;
 using UniRx.Triggers;
 using UniRx;
 using System.Data.Common;
+using Common;
 
 public class Presenter : MonoBehaviour
 {
@@ -46,6 +47,15 @@ public class Presenter : MonoBehaviour
             _str += _peakParam.Distance.ToString("f3") + ",";
             _str += "{" + _peakParam.Pos.x.ToString("f2") + "," + _peakParam.Pos.y.ToString("f2") + "," + _peakParam.Pos.z.ToString("f2") +  "}" + ",";
             view.UpdatePeakText(_str);
+            // Debug.LogAssertion(_str);
+            //検知されたボタンを取得
+            ActiveBtnState activeBtn = model.GetBtnState();
+            if (activeBtn.isFine)
+            {
+                Debug.LogWarning($"Detect!!! → {activeBtn.btnId}");
+            }else{
+                Debug.LogWarning($"NotDetect → {activeBtn.btnId}");
+            }
         }).AddTo(view);
         urgController.OnStartSensorFlag.Subscribe(_flag =>
         {
@@ -77,7 +87,7 @@ public class Presenter : MonoBehaviour
     //Edgeの初期位置を返す
 
     private Vector3 getEdgePosbyId(int _id){
-        Vector3 customPos = new Vector3(urgController.GetPosbyId(model.GetEdgePosbyId(_id)).x, 0, -1);
+        Vector3 customPos = new Vector3(urgController.GetPosbyId(model.GetEdgePosbyId(_id)).x, 0, -3.5f);
         return customPos;
     }
     //----- for view update -----
