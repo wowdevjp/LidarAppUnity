@@ -87,6 +87,8 @@ public class Model : MonoBehaviour
     private int checkBtnState(){
         int topCnt = -1;
         int btnId = -1;
+        if (btnFlagList.Count>0)
+        {
         for (int i = 0; i < Constants.BTNNUM; i++)
         {
             int cnt = 0;
@@ -102,6 +104,7 @@ public class Model : MonoBehaviour
                 btnId = i;
                 topCnt = cnt;
             }
+        }
         }
         return btnId;
     }
@@ -121,9 +124,11 @@ public class Model : MonoBehaviour
     private void resetBtnState(){
         updateCnt = 0;
         startCalc = false;
+        if(btnFlagList.Count > 0){
         for (int i = 0; i < Constants.BTNNUM; i++)
         {
             btnFlagList[i].Clear();
+        }
         }
     }
 

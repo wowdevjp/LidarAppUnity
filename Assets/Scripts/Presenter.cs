@@ -6,10 +6,10 @@ using Filter;
 using UnityEngine.UI;
 using TMPro;
 // using UnityEditor.Experimental.GraphView;
-using UnityEngine.UIElements;
+// using UnityEngine.UIElements;
 // using UnityEditorInternal;
 using Urg;
-using TMPro.EditorUtilities;
+// using TMPro.EditorUtilities;
 using UniRx.Triggers;
 using UniRx;
 using System.Data.Common;
@@ -81,12 +81,16 @@ public class Presenter : MonoBehaviour
 
     //----- main detect and send func -----
     private void main(PeakParam _peakParam){
+
+        Debug.LogWarning($"main_peakParam.ID.ToString():{_peakParam.ID.ToString()}");
+
         model.SetPeakParam(_peakParam);
         string _str = "";
         _str = _peakParam.ID.ToString() + ",";
         _str += _peakParam.Distance.ToString("f3") + ",";
         _str += "{" + _peakParam.Pos.x.ToString("f2") + "," + _peakParam.Pos.y.ToString("f2") + "," + _peakParam.Pos.z.ToString("f2") +  "}" + ",";
         view.UpdatePeakText(_str);
+        Debug.Log(_str);
         // Debug.LogAssertion(_str);
         //検知されたボタンを取得
         ActiveBtnState activeBtn = model.GetBtnState();

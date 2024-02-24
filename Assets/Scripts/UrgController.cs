@@ -148,6 +148,7 @@ public class UrgController : MonoBehaviour
             Debug.Log($"Length:{clippedData.Length}");
             positions.Add(urg.transform.position);
             peakId = filter.getMaxIndex(clippedData, clippedData.Length, averageTh);
+            Debug.Log($"peakId:{peakId}");
             for (int i = 0; i < clippedLength; i++)
             {
                 float distance = clippedData[i];
