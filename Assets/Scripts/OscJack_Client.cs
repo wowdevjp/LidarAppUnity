@@ -7,13 +7,14 @@ using System.Linq;
 
 public class OscJack_Client : MonoBehaviour
 {
-    [SerializeField] private string ipAddress = "127.0.0.1";
-	[SerializeField] private int Port = 7001;
+    [SerializeField] private string ipAddress = "192.168.1.35";
+	[SerializeField] private int Port = 8006;
     [SerializeField] private OscClient client;
 	[SerializeField] private string[] addrList = new string[Constants.BTNNUM];
 	// [SerializeField] private List<string> addrList = new List<string>();
 	// [SerializeField] private List<string> addrList = new List<string>(Constants.BTNNUM);
-    private string _addrStr = "/Btn";
+    //0123を送信する
+    private string _addrStr = "/zone3/hobbering";
     private bool isActive = false;
     void Awake()
     {
